@@ -1,0 +1,108 @@
+RECIPE TEMPLATE FOR DOCX/PDF IMPORT
+=====================================
+
+Copy this template into Microsoft Word (.docx) or save as PDF to import recipes.
+Each recipe must start with "RECIPE:" followed by the recipe name.
+
+
+RECIPE: Grilled Salmon with Quinoa
+Type: Dinner
+Protein: 42g
+Calories: 480
+Carbs: 35g
+Fats: 18g
+Ingredients: 6oz salmon fillet, 3/4 cup cooked quinoa, 1 cup roasted asparagus, lemon wedge, olive oil
+
+RECIPE: Protein Smoothie Bowl
+Type: Breakfast
+Protein: 30g
+Calories: 220
+Carbs: 12g
+Fats: 6g
+Ingredients: 1 scoop protein powder, 1 cup almond milk, 1/2 cup frozen berries, 1 tbsp peanut butter, ice
+
+RECIPE: Chicken Caesar Salad
+Type: Lunch
+Protein: 38g
+Calories: 420
+Carbs: 18g
+Fats: 22g
+Ingredients: 6oz grilled chicken breast, romaine lettuce, 2 tbsp Caesar dressing, parmesan cheese, croutons
+
+RECIPE: Greek Yogurt Protein Bowl
+Type: Breakfast
+Protein: 35g
+Calories: 320
+Carbs: 28g
+Fats: 8g
+Ingredients: 1 cup plain Greek yogurt, 1 scoop protein powder, 1/2 cup mixed berries, 1 tablespoon almond slivers
+
+RECIPE: Turkey Burrito Bowl
+Type: Lunch
+Protein: 40g
+Calories: 450
+Carbs: 42g
+Fats: 14g
+Ingredients: 6oz ground turkey, 1/2 cup brown rice, black beans, salsa, lettuce, cheese
+
+RECIPE: Baked Cod with Vegetables
+Type: Dinner
+Protein: 38g
+Calories: 380
+Carbs: 25g
+Fats: 12g
+Ingredients: 6oz cod fillet, mixed roasted vegetables, herbs, lemon, olive oil
+
+RECIPE: Cottage Cheese with Almonds
+Type: Snack
+Protein: 25g
+Calories: 240
+Carbs: 12g
+Fats: 12g
+Ingredients: 1 cup low-fat cottage cheese, 15 raw almonds, dash of cinnamon
+
+RECIPE: Steak with Sweet Potato
+Type: Dinner
+Protein: 45g
+Calories: 520
+Carbs: 38g
+Fats: 20g
+Ingredients: 6oz sirloin steak, 1 medium sweet potato, 2 cups steamed broccoli, garlic butter
+
+RECIPE: Tuna Salad Wraps
+Type: Lunch
+Protein: 32g
+Calories: 280
+Carbs: 8g
+Fats: 14g
+Ingredients: 1 can tuna in water, 2 tbsp light mayo, celery, romaine lettuce leaves, cucumber slices
+
+RECIPE: Apple with Almond Butter
+Type: Snack
+Protein: 8g
+Calories: 240
+Carbs: 28g
+Fats: 12g
+Ingredients: 1 medium apple sliced, 2 tbsp almond butter
+
+
+FORMATTING TIPS:
+================
+
+1. Always start each recipe with "RECIPE:" followed by the name
+2. Use the exact labels: Type, Protein, Calories, Carbs, Fats, Ingredients
+3. Numbers can include "g" or not (both "42g" and "42" work)
+4. Type must be one of: Breakfast, Lunch, Dinner, Snack
+5. Each recipe should be separated by a blank line
+6. The parser is case-insensitive for labels
+7. Order of fields doesn't matter (except recipe name must be first)
+
+
+To use this template:
+1. Copy the recipes above into Microsoft Word
+2. Save as .docx or export as .pdf
+3. In the app, go to Meal Library > Import Recipes
+4. Select DOCX/PDF method
+5. Upload your file
+6. Click "Parse Document"
+7. Preview and import!

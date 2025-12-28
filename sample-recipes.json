@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Protein Pancakes",
+    "type": "Breakfast",
+    "protein": 28,
+    "calories": 340,
+    "carbs": 42,
+    "fats": 8,
+    "ingredients": "1 scoop protein powder, 2 eggs, 1/2 cup oats, 1/4 cup almond milk, 1/2 banana, cinnamon",
+    "favorite": false
+  },
+  {
+    "name": "Avocado Toast with Poached Eggs",
+    "type": "Breakfast",
+    "protein": 22,
+    "calories": 390,
+    "carbs": 28,
+    "fats": 20,
+    "ingredients": "2 slices whole grain bread, 1/2 avocado mashed, 2 poached eggs, everything bagel seasoning",
+    "favorite": false
+  },
+  {
+    "name": "Chicken Caesar Salad",
+    "type": "Lunch",
+    "protein": 38,
+    "calories": 420,
+    "carbs": 18,
+    "fats": 22,
+    "ingredients": "6oz grilled chicken breast, romaine lettuce, 2 tbsp Caesar dressing, parmesan cheese, croutons",
+    "favorite": false
+  },
+  {
+    "name": "Turkey and Hummus Wrap",
+    "type": "Lunch",
+    "protein": 32,
+    "calories": 380,
+    "carbs": 35,
+    "fats": 12,
+    "ingredients": "Whole wheat tortilla, 4oz sliced turkey breast, 3 tbsp hummus, lettuce, tomato, cucumber",
+    "favorite": false
+  },
+  {
+    "name": "Asian Chicken Bowl",
+    "type": "Lunch",
+    "protein": 40,
+    "calories": 450,
+    "carbs": 48,
+    "fats": 10,
+    "ingredients": "6oz grilled chicken, 1 cup brown rice, stir-fry vegetables, teriyaki sauce, sesame seeds",
+    "favorite": false
+  },
+  {
+    "name": "Steak with Sweet Potato and Broccoli",
+    "type": "Dinner",
+    "protein": 45,
+    "calories": 520,
+    "carbs": 38,
+    "fats": 20,
+    "ingredients": "6oz sirloin steak, 1 medium sweet potato, 2 cups steamed broccoli, olive oil, garlic",
+    "favorite": true
+  },
+  {
+    "name": "Baked Cod with Quinoa Pilaf",
+    "type": "Dinner",
+    "protein": 38,
+    "calories": 420,
+    "carbs": 40,
+    "fats": 12,
+    "ingredients": "6oz cod fillet, 3/4 cup cooked quinoa, mixed vegetables, lemon, herbs",
+    "favorite": false
+  },
+  {
+    "name": "Chicken Burrito Bowl",
+    "type": "Dinner",
+    "protein": 42,
+    "calories": 480,
+    "carbs": 45,
+    "fats": 16,
+    "ingredients": "6oz chicken breast, 1/2 cup brown rice, black beans, salsa, lettuce, cheese, sour cream",
+    "favorite": true
+  },
+  {
+    "name": "Shrimp Pasta Primavera",
+    "type": "Dinner",
+    "protein": 35,
+    "calories": 460,
+    "carbs": 52,
+    "fats": 14,
+    "ingredients": "6oz shrimp, 2oz whole wheat pasta, mixed vegetables, olive oil, garlic, parmesan",
+    "favorite": false
+  },
+  {
+    "name": "Protein Smoothie",
+    "type": "Snack",
+    "protein": 32,
+    "calories": 220,
+    "carbs": 12,
+    "fats": 6,
+    "ingredients": "1 scoop protein powder, 1 cup almond milk, 1/2 cup frozen berries, 1 tbsp peanut butter, ice",
+    "favorite": false
+  },
+  {
+    "name": "Apple with Almond Butter",
+    "type": "Snack",
+    "protein": 8,
+    "calories": 240,
+    "carbs": 28,
+    "fats": 12,
+    "ingredients": "1 medium apple sliced, 2 tbsp almond butter",
+    "favorite": false
+  },
+  {
+    "name": "Hard-Boiled Eggs with Veggies",
+    "type": "Snack",
+    "protein": 18,
+    "calories": 200,
+    "carbs": 8,
+    "fats": 12,
+    "ingredients": "3 hard-boiled eggs, cherry tomatoes, cucumber slices, salt and pepper",
+    "favorite": false
+  },
+  {
+    "name": "Rice Cakes with Tuna",
+    "type": "Snack",
+    "protein": 22,
+    "calories": 180,
+    "carbs": 16,
+    "fats": 6,
+    "ingredients": "2 rice cakes, 1/2 can tuna in water, mustard, cucumber slices",
+    "favorite": false
+  },
+  {
+    "name": "Mediterranean Chicken Bowl",
+    "type": "Lunch",
+    "protein": 42,
+    "calories": 440,
+    "carbs": 32,
+    "fats": 18,
+    "ingredients": "6oz grilled chicken, quinoa, cucumber, tomatoes, olives, feta cheese, tzatziki sauce",
+    "favorite": true
+  },
+  {
+    "name": "Turkey Meatballs with Zucchini Noodles",
+    "type": "Dinner",
+    "protein": 38,
+    "calories": 360,
+    "carbs": 18,
+    "fats": 16,
+    "ingredients": "6oz turkey meatballs, 2 cups zucchini noodles, marinara sauce, parmesan cheese, basil",
+    "favorite": false
+  }
+]

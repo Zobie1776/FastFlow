@@ -1,0 +1,39 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Decode keystore
+        run: |
+          mkdir -p android/keystore
+          echo "${FASTFLOW_KEYSTORE_BASE64}" | base64 --decode > android/keystore/fastflow-release.keystore
+        env:
+          FASTFLOW_KEYSTORE_BASE64: ${{ secrets.FASTFLOW_KEYSTORE_BASE64 }}
+
+      - name: Build release APK
+        working-directory: android
+        run: ./gradlew assembleRelease
+        env:
+          FASTFLOW_KEYSTORE_PASSWORD: ${{ secrets.FASTFLOW_KEYSTORE_PASSWORD }}
+          FASTFLOW_KEY_PASSWORD: ${{ secrets.FASTFLOW_KEY_PASSWORD }}
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FastFlow-beta-apk
+          path: android/app/build/outputs/apk/release/app-release.apk

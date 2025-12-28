@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Minimal Gradle wrapper script
+
+DIR="$(cd "$(dirname "$0")" && pwd)"
+WRAPPER_JAR="$DIR/gradle/wrapper/gradle-wrapper.jar"
+
+if [ ! -f "$WRAPPER_JAR" ]; then
+  echo "Missing gradle wrapper jar at $WRAPPER_JAR" >&2
+  echo "Run Gradle wrapper generation or add the jar." >&2
+  exit 1
+fi
+
+JAVA_CMD="java"
+exec "$JAVA_CMD" -jar "$WRAPPER_JAR" "$@"

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Track your intermittent fasting journey with protocols, badges, and body stats">
+  <meta name="theme-color" content="#6366f1">
+  <title>FastFlow</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="src/styles/main.css">
+
+  <!-- Chart.js for graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-logo-row">
+        <img src="public/assets/logo/fastflow-logo.svg" alt="FastFlow" class="app-logo">
+        <h1>FastFlow</h1>
+      </div>
+      <div class="subtitle">Your journey to metabolic health</div>
+    </header>
+
+    <!-- Maintenance Mode Banner (conditionally shown) -->
+    <div id="maintenanceModeBanner" style="display: none;"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-container">
+      <select id="sectionSelect" class="nav-select">
+        <option value="dashboardTab">🏠 Dashboard</option>
+        <option value="mealsTab">🍽️ Meals</option>
+        <option value="exercisesTab">💪 Exercise</option>
+        <option value="bodyStatsTab">📊 Body Stats</option>
+        <option value="badgesTab">🏆 Badges</option>
+        <option value="historyTab">📜 History</option>
+        <option value="settingsTab">⚙️ Settings</option>
+        <option value="educationTab">📚 Education</option>
+      </select>
+    </nav>
+
+    <!-- Dashboard Tab -->
+    <div id="dashboardTab" class="tab-content">
+      <!-- Timer Display (shown when fast is active) -->
+      <div id="timerDisplay" class="timer-display" style="display: none;">
+        <div id="timerCountdown" class="timer-countdown">00:00:00</div>
+        <div id="timerStatus" class="timer-status">Fasting in progress</div>
+        <!-- FIX 1: Fasting time window display -->
+        <div id="fastingWindow" class="fasting-window" style="font-size: 13px; opacity: 0.9; margin: 8px 0;"></div>
+        <div class="timer-progress">
+          <div id="timerProgressBar" class="timer-progress-bar" style="width: 0%;"></div>
+        </div>
+        <!-- FIX 4: Timer info overlay with hover/tap fade -->
+        <div id="currentPhase" class="current-phase timer-overlay">
+          <div style="font-size: 18px; font-weight: 600;">Loading...</div>
+        </div>
+      </div>
+
+      <!-- Fasting Controls -->
+      <div class="card">
+        <h2>Fasting Controls</h2>
+        <div class="form-group">
+          <label class="form-label">Select Protocol</label>
+          <select id="timerPhaseSelect" class="form-select">
+            <option value="8_16" selected>Beginner 8:16 (8hr fasting, 16hr eating)</option>
+            <option value="10_14">Beginner 10:14 (10hr fasting, 14hr eating)</option>
+            <option value="12_12">Beginner 12:12 (12hr fasting, 12hr eating)</option>
+            <option value="14_10">Intermediate 14:10 (14hr fasting, 10hr eating)</option>
+            <option value="16_8">Intermediate 16:8 (16hr fasting, 8hr eating)</option>
+            <option value="18_6">Advanced 18:6 (18hr fasting, 6hr eating)</option>
+            <option value="20_4">Advanced 20:4 (20hr fasting, 4hr eating)</option>
+            <option value="24_plus">Extended 24+ (24+ hour fasting)</option>
+          </select>
+        </div>
+        <button id="startFastBtn" class="btn btn-primary btn-block">Start Fast</button>
+        <button id="stopFastBtn" class="btn btn-danger btn-block" style="display: none;">Stop Fast</button>
+        <div id="schedulerHint" style="font-size: 13px; color: var(--text-secondary); margin-top: 10px;"></div>
+      </div>
+
+      <!-- Dashboard Stats -->
+      <div class="card">
+        <h2>Your Progress</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div id="totalFasts" class="stat-value">0</div>
+            <div class="stat-label">Total Fasts</div>
+          </div>
+          <div class="stat-card">
+            <div id="totalHours" class="stat-value">0h</div>
+            <div class="stat-label">Total Hours</div>
+          </div>
+          <div class="stat-card">
+            <div id="currentStreak" class="stat-value">0 days</div>
+            <div class="stat-label">Current Streak</div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- RESTORED: Meals Tab -->
+    <div id="mealsTab" class="tab-content">
+      <div class="card">
+        <h2>Add Meal</h2>
+        <form id="mealForm">
+          <div class="form-group">
+            <label class="form-label">Meal Name</label>
+            <input type="text" id="mealName" class="form-input" required placeholder="e.g., Grilled Chicken Salad">
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Type</label>
+              <select id="mealType" class="form-select" required>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Snack">Snack</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select id="mealCategory" class="form-select" required>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Calories</label>
+              <input type="number" id="mealCalories" class="form-input" required step="1" placeholder="e.g., 450">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Protein (g)</label>
+              <input type="number" id="mealProtein" class="form-input" required step="0.1" placeholder="e.g., 38">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Carbs (g)</label>
+              <input type="number" id="mealCarbs" class="form-input" required step="0.1" placeholder="e.g., 35">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fats (g)</label>
+              <input type="number" id="mealFats" class="form-input" required step="0.1" placeholder="e.g., 18">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dietary Tags</label>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="checkbox" name="mealDietaryTags" value="high-protein" checked>
+                High Protein
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="checkbox" name="mealDietaryTags" value="keto">
+                Keto / Low Carb
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; font-size: 13px;">
+                <input type="checkbox" name="mealDietaryTags" value="mixed">
+                Mixed / Balanced
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ingredients</label>
+            <textarea id="mealIngredients" class="form-textarea" rows="2" placeholder="e.g., 6oz chicken breast, mixed greens, olive oil..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Add Meal</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Import Meals</h2>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <button id="importMealsJsonBtn" class="btn btn-outline">Import from JSON</button>
+          <button id="importMealsTextBtn" class="btn btn-outline">Import from Text/Markdown</button>
+        </div>
+        <input type="file" id="mealJsonFileInput" accept=".json" style="display: none;">
+        <input type="file" id="mealTextFileInput" accept=".txt,.md" style="display: none;">
+        <p style="font-size: 13px; color: var(--text-secondary); margin-top: 12px;">
+          💡 Import meals in bulk from JSON files or text files with MEAL: format
+        </p>
+      </div>
+
+      <!-- NEW: Meal Diversity Score Widget -->
+      <div id="mealDiversityScore"></div>
+
+      <div class="card">
+        <h2>Water Intake</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-bottom: 16px;">
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 14px;">
+              <input type="radio" name="waterUnit" value="ml">
+              ml
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 14px;">
+              <input type="radio" name="waterUnit" value="oz">
+              oz
+            </label>
+          </div>
+          <div style="font-size: 13px; color: var(--text-secondary);">
+            General daily hydration recommendation for most adults
+          </div>
+        </div>
+
+        <div style="background: var(--bg-tertiary); border-radius: 10px; height: 12px; overflow: hidden; margin-bottom: 10px;">
+          <div id="waterProgressBar" style="height: 100%; width: 0%; background: var(--primary-color); transition: width 0.3s ease;"></div>
+        </div>
+        <div id="waterProgressText" style="font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px;"></div>
+
+        <div id="waterQuickAddButtons" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;"></div>
+
+        <div id="waterEntriesList" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;"></div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px;">
+          <input type="number" id="waterCustomAmount" class="form-input" style="max-width: 140px;" placeholder="Custom amount">
+          <button id="waterAddCustomBtn" class="btn btn-outline">Add Water</button>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+          <label class="form-label" style="margin: 0;">Daily Goal</label>
+          <input type="number" id="waterDailyGoalInput" class="form-input" style="max-width: 140px;">
+          <span id="waterGoalUnitLabel" style="font-size: 13px; color: var(--text-secondary);"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <details>
+          <summary style="font-weight: 700; font-size: 16px; cursor: pointer;">Fasting-aware meal education</summary>
+          <div style="margin-top: 16px; font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">Satiety and hunger control</div>
+            <p style="margin-top: 0;">Protein is the most satiating macronutrient. Higher protein meals can reduce hunger, cravings, and overeating, and keto or low-carb choices may blunt ghrelin. This often makes fasting windows easier to follow.</p>
+
+            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">Muscle preservation and body composition</div>
+            <p style="margin-top: 0;">Higher protein intake during fasting supports lean mass retention. Spreading protein across meals can improve fat loss while preserving fat-free mass.</p>
+
+            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">Metabolic and fat-loss effects</div>
+            <p style="margin-top: 0;">Protein has a higher thermic effect, meaning it burns more calories during digestion. Keto or low-carb meals keep insulin lower, supporting fat oxidation and metabolic flexibility, which can make transitions back into fasting smoother.</p>
+
+            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">Practical eating window guidance</div>
+            <p style="margin-top: 0;">A commonly suggested protein range is about 1.6-2.2 g/kg/day for active users (not enforced here). Emphasize whole-food proteins (eggs, meat, fish, Greek yogurt, cottage cheese, tofu, tempeh), non-starchy vegetables, and healthy fats. A keto-leaning approach is optional, not required.</p>
+
+            <div style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 12px; border-radius: 8px; font-size: 13px;">
+              <strong>Safety disclaimer:</strong><br>
+              This app does not provide medical advice.<br>
+              Users with diabetes, kidney disease, or on medications should consult a healthcare professional before changing protein intake or following a keto-style diet.
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2 style="margin: 0;">Meal Library</h2>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <label style="font-size: 14px; color: var(--text-secondary);">Filter:</label>
+            <select id="mealCategoryFilter" class="form-select" style="width: auto; min-width: 150px;">
+              <option value="all">All Categories</option>
+              <option value="breakfast">Breakfast</option>
+              <option value="lunch">Lunch</option>
+              <option value="dinner">Dinner</option>
+              <option value="snack">Snack</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 16px;">
+          <div id="mealDietaryFilters" style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <button type="button" class="btn btn-outline meal-filter-btn" data-dietary-filter="all">All Meals</button>
+            <button type="button" class="btn btn-outline meal-filter-btn" data-dietary-filter="high-protein">High Protein</button>
+            <button type="button" class="btn btn-outline meal-filter-btn" data-dietary-filter="keto">Keto / Low Carb</button>
+            <button type="button" class="btn btn-outline meal-filter-btn" data-dietary-filter="mixed">Mixed</button>
+          </div>
+          <input type="text" id="mealSearchInput" class="form-input" placeholder="Search meals or ingredients" style="max-width: 260px;">
+        </div>
+        <div id="mealsLibraryContainer"></div>
+      </div>
+    </div>
+
+    <!-- RESTORED: Exercises Tab -->
+    <div id="exercisesTab" class="tab-content">
+      <div class="card">
+        <h2>Workout Stats</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div id="totalWorkouts" class="stat-value">0</div>
+            <div class="stat-label">Total Workouts</div>
+          </div>
+          <div class="stat-card">
+            <div id="totalWorkoutMinutes" class="stat-value">0</div>
+            <div class="stat-label">Total Minutes</div>
+          </div>
+          <div class="stat-card">
+            <div id="thisWeekWorkouts" class="stat-value">0</div>
+            <div class="stat-label">This Week</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Log Workout</h2>
+        <form id="workoutForm">
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" id="workoutDate" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Workout Type</label>
+            <select id="workoutType" class="form-select" required>
+              <option value="Calisthenics">Calisthenics</option>
+              <option value="Gym">Gym / Weights</option>
+              <option value="Cardio">Cardio</option>
+              <option value="Yoga">Yoga</option>
+              <option value="Sports">Sports</option>
+              <option value="Walking">Walking</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Duration (min)</label>
+              <input type="number" id="workoutDuration" class="form-input" required step="1" placeholder="e.g., 45">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Calories Burned</label>
+              <input type="number" id="workoutCalories" class="form-input" required step="1" placeholder="e.g., 300">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            <textarea id="workoutNotes" class="form-textarea" rows="2" placeholder="Optional workout notes..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Log Workout</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Workout History</h2>
+        <div id="workoutHistoryContainer"></div>
+      </div>
+
+      <div class="card">
+        <h2>Add Custom Exercise</h2>
+        <form id="exerciseForm">
+          <div class="form-group">
+            <label class="form-label">Exercise Name</label>
+            <input type="text" id="exerciseName" class="form-input" required placeholder="e.g., Handstand Push-up">
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select id="exerciseCategory" class="form-select" required>
+                <option value="Push">Push</option>
+                <option value="Pull">Pull</option>
+                <option value="Core">Core</option>
+                <option value="Legs">Legs</option>
+                <option value="Full Body">Full Body</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Difficulty</label>
+              <select id="exerciseDifficulty" class="form-select" required>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target Reps</label>
+            <input type="text" id="exerciseTargetReps" class="form-input" required placeholder="e.g., 10 or 60s">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Progression Notes</label>
+            <textarea id="exerciseProgression" class="form-textarea" rows="2" placeholder="How to progress to harder variations..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Add Exercise</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Import Exercises</h2>
+        <button id="importExercisesBtn" class="btn btn-outline">Import from JSON</button>
+        <input type="file" id="exerciseJsonFileInput" accept=".json" style="display: none;">
+      </div>
+
+      <div class="card">
+        <h2>Exercise Library</h2>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+          30 default bodyweight exercises organized by category. Add your own custom exercises above.
+        </p>
+        <div id="exerciseLibraryContainer"></div>
+      </div>
+    </div>
+
+    <!-- Body Stats Tab -->
+    <div id="bodyStatsTab" class="tab-content">
+      <div class="card">
+        <h2>Add Body Stats</h2>
+        <form id="bodyStatForm">
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" id="statDate" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="weightUnitLabel">Weight (lb)</label>
+            <input type="number" id="statWeight" class="form-input" step="0.1" placeholder="e.g., 180.5">
+          </div>
+          <div class="form-group" style="display: flex; gap: 12px; align-items: center;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 13px;">
+              <input type="radio" name="weightUnit" value="lb">
+              lb
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 13px;">
+              <input type="radio" name="weightUnit" value="kg">
+              kg
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Goal Weight</label>
+            <input type="number" id="goalWeightInput" class="form-input" step="0.1" placeholder="Optional">
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">
+              Used to track progress and unlock weight milestones
+            </div>
+            <div id="goalWeightProgress" style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-top: 8px;"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Waist (inches)</label>
+            <input type="number" id="statWaist" class="form-input" step="0.1" placeholder="e.g., 32.5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Chest (inches)</label>
+            <input type="number" id="statChest" class="form-input" step="0.1" placeholder="e.g., 38.0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hips (inches)</label>
+            <input type="number" id="statHips" class="form-input" step="0.1" placeholder="e.g., 36.0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Arms (inches)</label>
+            <input type="number" id="statArms" class="form-input" step="0.1" placeholder="e.g., 13.5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Thighs (inches)</label>
+            <input type="number" id="statThighs" class="form-input" step="0.1" placeholder="e.g., 22.0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Energy Level (1-10)</label>
+            <input type="number" id="statEnergy" class="form-input" min="1" max="10" placeholder="1-10">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mood (1-10)</label>
+            <input type="number" id="statMood" class="form-input" min="1" max="10" placeholder="1-10">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Progress Photos</label>
+            <input type="file" id="statPhotos" class="form-input" accept="image/*" multiple>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">
+              Add photos to visually track progress (stored locally on this device).
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notes</label>
+            <textarea id="statNotes" class="form-textarea" placeholder="Optional notes..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Save Body Stats</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Weight Progress</h2>
+        <div class="chart-container">
+          <canvas id="bodyWeightChart"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Body Stats History</h2>
+        <div id="bodyStatsTable"></div>
+      </div>
+    </div>
+
+    <!-- Badges Tab -->
+    <div id="badgesTab" class="tab-content">
+      <div class="card">
+        <h2>🏆 Achievement Badges</h2>
+        <div id="badgesContainer"></div>
+      </div>
+    </div>
+
+    <!-- History Tab -->
+    <div id="historyTab" class="tab-content">
+      <div class="card">
+        <h2>Fasting History</h2>
+        <div id="historyContainer">
+          <p style="text-align: center; padding: 32px; color: #94a3b8;">
+            History view coming soon. All your fasting sessions are being tracked in localStorage.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="settingsTab" class="tab-content">
+      <div class="card">
+        <h2>Fasting Schedule (Optional)</h2>
+        <div class="form-group" style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="schedulerEnabled">
+          <label for="schedulerEnabled" style="font-size: 14px; font-weight: 600;">Enable Scheduler</label>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Daily Fast Start</label>
+            <input type="time" id="schedulerStartTime" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Daily Fast End</label>
+            <input type="time" id="schedulerEndTime" class="form-input">
+          </div>
+        </div>
+        <div style="font-size: 13px; color: var(--text-secondary);">
+          You’ll receive reminders at these times. You’re always in control.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Theme</h2>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
+            <input type="radio" name="themePreference" value="light">
+            Light
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
+            <input type="radio" name="themePreference" value="dark">
+            Dark
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 14px;">
+            <input type="radio" name="themePreference" value="system">
+            System
+          </label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Maintenance Mode</h2>
+        <div id="maintenanceModeStatus"></div>
+        <button id="toggleMaintenanceModeBtn" class="btn btn-primary btn-block">
+          Activate Maintenance Mode
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>Notification Settings</h2>
+        <div id="notificationStatusBanner"></div>
+        <form id="notificationSettingsForm">
+          <div class="form-checkbox">
+            <input type="checkbox" id="notifyFastEnding" checked>
+            <label for="notifyFastEnding">Notify when fast is ending soon</label>
+          </div>
+          <div class="form-checkbox">
+            <input type="checkbox" id="notifyFastComplete" checked>
+            <label for="notifyFastComplete">Notify when planned fast is complete</label>
+          </div>
+          <div class="form-checkbox">
+            <input type="checkbox" id="notifyWaterReminders" checked>
+            <label for="notifyWaterReminders">Water reminders during fast</label>
+          </div>
+          <div class="form-checkbox">
+            <input type="checkbox" id="notifyPhaseTransition">
+            <label for="notifyPhaseTransition">Phase transition notifications</label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Save Preferences</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Data Management</h2>
+        <button id="exportDataBtn" class="btn btn-outline btn-block">Export All Data</button>
+        <button id="importDataBtn" class="btn btn-outline btn-block" style="margin-top: 12px;">Import Data</button>
+        <input type="file" id="importFileInput" accept=".json" style="display: none;">
+        <!-- FIX 3: Clear cache / reset data button -->
+        <div style="margin-top: 24px; padding-top: 24px; border-top: 2px solid #fee2e2;">
+          <p style="font-size: 13px; color: #dc2626; margin-bottom: 12px; font-weight: 600;">⚠️ Danger Zone</p>
+          <button id="clearCacheBtn" class="btn btn-danger btn-block">Clear All Data & Reset App</button>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- Education Tab -->
+    <div id="educationTab" class="tab-content">
+      <div class="card">
+        <h2>📚 Understanding Fasting</h2>
+
+        <div class="education-card">
+          <h4>What is Intermittent Fasting?</h4>
+          <p>
+            Intermittent fasting is an eating pattern that cycles between periods of eating and fasting.
+            It focuses on WHEN you eat rather than WHAT you eat, allowing your body to enter different
+            metabolic states that promote fat burning, autophagy, and cellular repair.
+          </p>
+        </div>
+
+        <div class="education-card">
+          <h4>Benefits of Fasting</h4>
+          <p>
+            • Fat burning and weight loss<br>
+            • Improved insulin sensitivity<br>
+            • Enhanced mental clarity<br>
+            • Cellular autophagy (cleanup)<br>
+            • Reduced inflammation<br>
+            • Increased energy levels
+          </p>
+        </div>
+
+        <div class="education-card">
+          <h4>Fasting Protocols</h4>
+          <div id="educationProtocols"></div>
+        </div>
+
+        <div class="education-card">
+          <h4>Metabolic Phases</h4>
+          <p>
+            <strong>0-4h:</strong> Fed State - Digesting food<br>
+            <strong>4-8h:</strong> Early Fasting - Transitioning to fat burning<br>
+            <strong>8-12h:</strong> Fat Burning - Primary fuel source switches<br>
+            <strong>12-16h:</strong> Ketosis Begins - Ketone production starts<br>
+            <strong>16-24h:</strong> Deep Ketosis - Peak fat burning<br>
+            <strong>24-48h:</strong> Autophagy - Cellular cleanup<br>
+            <strong>48-72h:</strong> Deep Autophagy - Enhanced cellular repair<br>
+            <strong>72+h:</strong> Maximum Autophagy - Advanced cellular renewal
+          </p>
+        </div>
+
+        <div class="education-card">
+          <h4>Maintenance Mode</h4>
+          <p>
+            Once you've reached your goals, activate Maintenance Mode for a flexible approach.
+            This mode recommends gentler protocols (8:16, 10:14, 12:12, 14:10) and reduces notification
+            frequency while still tracking your progress. Perfect for sustainable, long-term health.
+          </p>
+        </div>
+
+        <div class="education-card">
+          <h4>Safety Tips</h4>
+          <p>
+            • Stay hydrated - drink plenty of water<br>
+            • Listen to your body - stop if you feel unwell<br>
+            • Start with shorter fasts and progress gradually<br>
+            • Consult a healthcare provider before starting<br>
+            • Break your fast gently with nutrient-dense foods<br>
+            • Not recommended during pregnancy or certain medical conditions
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App Script (ES Module) -->
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

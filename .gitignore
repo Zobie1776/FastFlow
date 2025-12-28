@@ -1,0 +1,13 @@
+# Android
+android/keystore/
+android/.gradle/
+android/build/
+android/app/build/
+
+# Node
+node_modules/
+
+# OS / IDE
+.idea/
+.DS_Store
+
