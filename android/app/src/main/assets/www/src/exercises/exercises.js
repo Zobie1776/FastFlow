@@ -372,3 +372,247 @@ export function importExercisesFromJSON(jsonData) {
     throw error;
   }
 }
+
+/**
+ * Workout Plan Templates
+ */
+const WORKOUT_PLANS = [
+  {
+    planId: 'push_beginner',
+    planName: 'Push Day (Beginner)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Beginner',
+    estimatedDurationMinutes: 20,
+    exercises: ['Standard Push-up', 'Wide-Grip Push-up', 'Pike Push-up', 'Plank'],
+    metadata: { sets: 3, reps: '8-12', rest: '60s' }
+  },
+  {
+    planId: 'pull_beginner',
+    planName: 'Pull Day (Beginner)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Beginner',
+    estimatedDurationMinutes: 20,
+    exercises: ['Australian Pull-up', 'Pull-up (Assisted)', 'Bicycle Crunches'],
+    metadata: { sets: 3, reps: '8-12', rest: '60s' }
+  },
+  {
+    planId: 'legs_beginner',
+    planName: 'Leg Day (Beginner)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Beginner',
+    estimatedDurationMinutes: 20,
+    exercises: ['Bodyweight Squat', 'Lunges', 'Step-ups'],
+    metadata: { sets: 3, reps: '12-15', rest: '45s' }
+  },
+  {
+    planId: 'full_beginner',
+    planName: 'Full Body (Beginner)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Beginner',
+    estimatedDurationMinutes: 30,
+    exercises: ['Standard Push-up', 'Bodyweight Squat', 'Plank', 'Jumping Jacks', 'Bear Crawls'],
+    metadata: { sets: 3, reps: '10-12', rest: '60s' }
+  },
+  {
+    planId: 'hiit_beginner',
+    planName: 'HIIT Circuit (Beginner)',
+    category: 'HIIT',
+    difficultyLevel: 'Beginner',
+    estimatedDurationMinutes: 15,
+    exercises: ['Jumping Jacks', 'Bodyweight Squat', 'Standard Push-up', 'High Knees'],
+    metadata: { rounds: 3, workTime: '30s', restTime: '30s' }
+  },
+  {
+    planId: 'push_intermediate',
+    planName: 'Push Day (Intermediate)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Intermediate',
+    estimatedDurationMinutes: 30,
+    exercises: ['Diamond Push-up', 'Decline Push-up', 'Pike Push-up', 'Wide-Grip Push-up', 'Plank'],
+    metadata: { sets: 4, reps: '10-15', rest: '45s' }
+  },
+  {
+    planId: 'pull_intermediate',
+    planName: 'Pull Day (Intermediate)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Intermediate',
+    estimatedDurationMinutes: 30,
+    exercises: ['Standard Pull-up', 'Chin-up', 'Hanging Leg Raise', 'Mountain Climbers'],
+    metadata: { sets: 4, reps: '8-12', rest: '60s' }
+  },
+  {
+    planId: 'legs_intermediate',
+    planName: 'Leg Day (Intermediate)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Intermediate',
+    estimatedDurationMinutes: 30,
+    exercises: ['Bulgarian Split Squat', 'Step-ups', 'Jump Squat', 'Lunges'],
+    metadata: { sets: 4, reps: '12-15', rest: '45s' }
+  },
+  {
+    planId: 'hiit_intermediate',
+    planName: 'HIIT Circuit (Intermediate)',
+    category: 'HIIT',
+    difficultyLevel: 'Intermediate',
+    estimatedDurationMinutes: 20,
+    exercises: ['Burpees', 'Mountain Climbers', 'Jump Squat', 'Standard Push-up', 'High Knees'],
+    metadata: { rounds: 4, workTime: '40s', restTime: '20s' }
+  },
+  {
+    planId: 'full_intermediate',
+    planName: 'Full Body (Intermediate)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Intermediate',
+    estimatedDurationMinutes: 35,
+    exercises: ['Burpees', 'Standard Pull-up', 'Decline Push-up', 'Bulgarian Split Squat', 'Hanging Leg Raise', 'Turkish Get-up (Bodyweight)'],
+    metadata: { sets: 3, reps: '10-12', rest: '45s' }
+  },
+  {
+    planId: 'push_advanced',
+    planName: 'Push Day (Advanced)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Advanced',
+    estimatedDurationMinutes: 40,
+    exercises: ['Archer Push-up', 'Decline Push-up', 'Diamond Push-up', 'Pike Push-up', 'L-Sit'],
+    metadata: { sets: 5, reps: '8-12', rest: '45s' }
+  },
+  {
+    planId: 'pull_advanced',
+    planName: 'Pull Day (Advanced)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Advanced',
+    estimatedDurationMinutes: 40,
+    exercises: ['Muscle-up', 'Wide-Grip Pull-up', 'Standard Pull-up', 'Hanging Leg Raise', 'Dragon Flag'],
+    metadata: { sets: 5, reps: '6-10', rest: '60s' }
+  },
+  {
+    planId: 'legs_advanced',
+    planName: 'Leg Day (Advanced)',
+    category: 'Calisthenics',
+    difficultyLevel: 'Advanced',
+    estimatedDurationMinutes: 40,
+    exercises: ['Pistol Squat', 'Jump Squat', 'Bulgarian Split Squat', 'Lunges'],
+    metadata: { sets: 5, reps: '10-12', rest: '45s' }
+  },
+  {
+    planId: 'hiit_advanced',
+    planName: 'HIIT Circuit (Advanced)',
+    category: 'HIIT',
+    difficultyLevel: 'Advanced',
+    estimatedDurationMinutes: 25,
+    exercises: ['Burpees', 'Jump Squat', 'Mountain Climbers', 'Sprawls', 'High Knees'],
+    metadata: { rounds: 5, workTime: '45s', restTime: '15s' }
+  },
+  {
+    planId: 'core_all',
+    planName: 'Core Blast',
+    category: 'Calisthenics',
+    difficultyLevel: 'Intermediate',
+    estimatedDurationMinutes: 15,
+    exercises: ['Plank', 'Bicycle Crunches', 'Mountain Climbers', 'Hanging Leg Raise'],
+    metadata: { sets: 3, duration: '45s', rest: '30s' }
+  },
+  {
+    planId: 'quick_10',
+    planName: 'Quick 10-Min Blast',
+    category: 'HIIT',
+    difficultyLevel: 'Beginner',
+    estimatedDurationMinutes: 10,
+    exercises: ['Jumping Jacks', 'Bodyweight Squat', 'Standard Push-up'],
+    metadata: { rounds: 3, workTime: '30s', restTime: '20s' }
+  }
+];
+
+/**
+ * Get all workout plans
+ */
+export function getAllWorkoutPlans() {
+  return WORKOUT_PLANS;
+}
+
+/**
+ * Get workout plans by filter
+ */
+export function getWorkoutPlansByFilter(filters = {}) {
+  let plans = [...WORKOUT_PLANS];
+
+  if (filters.category) {
+    plans = plans.filter(p => p.category === filters.category);
+  }
+
+  if (filters.difficultyLevel) {
+    plans = plans.filter(p => p.difficultyLevel === filters.difficultyLevel);
+  }
+
+  if (filters.maxDuration) {
+    plans = plans.filter(p => p.estimatedDurationMinutes <= filters.maxDuration);
+  }
+
+  return plans;
+}
+
+/**
+ * Get workout plan by ID
+ */
+export function getWorkoutPlanById(planId) {
+  return WORKOUT_PLANS.find(p => p.planId === planId);
+}
+
+/**
+ * Log workout from plan template
+ */
+export function logWorkoutFromPlan(planId, customData = {}) {
+  const plan = getWorkoutPlanById(planId);
+  if (!plan) {
+    throw new Error(`Workout plan ${planId} not found`);
+  }
+
+  const workoutData = {
+    date: customData.date || new Date().toISOString().split('T')[0],
+    workoutType: plan.category,
+    exercises: plan.exercises,
+    duration: customData.duration || plan.estimatedDurationMinutes,
+    caloriesBurned: customData.caloriesBurned || estimateCaloriesForPlan(plan),
+    notes: customData.notes || `${plan.planName} - ${plan.metadata.sets || plan.metadata.rounds} ${plan.metadata.sets ? 'sets' : 'rounds'}`,
+    planId: plan.planId,
+    planName: plan.planName
+  };
+
+  return logWorkout(workoutData);
+}
+
+/**
+ * Estimate calories burned for a plan (rough estimate)
+ */
+function estimateCaloriesForPlan(plan) {
+  const baseCaloriesPerMinute = {
+    'HIIT': 10,
+    'Calisthenics': 7,
+    'Gym': 6
+  };
+
+  const rate = baseCaloriesPerMinute[plan.category] || 6;
+  return Math.round(plan.estimatedDurationMinutes * rate);
+}
+
+/**
+ * Log workout from single exercise
+ */
+export function logWorkoutFromExercise(exerciseName, workoutData = {}) {
+  const exercise = getAllExercises().find(e => e.name === exerciseName);
+
+  if (!exercise) {
+    throw new Error(`Exercise ${exerciseName} not found`);
+  }
+
+  const workout = {
+    date: workoutData.date || new Date().toISOString().split('T')[0],
+    workoutType: workoutData.workoutType || exercise.category,
+    exercises: [exerciseName],
+    duration: workoutData.duration || 15,
+    caloriesBurned: workoutData.caloriesBurned || 100,
+    notes: workoutData.notes || `${exerciseName}${workoutData.sets ? ` - ${workoutData.sets} sets` : ''}${workoutData.reps ? ` x ${workoutData.reps} reps` : ''}`
+  };
+
+  return logWorkout(workout);
+}

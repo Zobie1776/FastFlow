@@ -20,12 +20,13 @@ import { initializeDefaultMeals } from './meals/meals.js';
 import { initializeMealsView } from './ui/mealsView.js';
 import { initializeDefaultExercises } from './exercises/exercises.js';
 import { initializeExercisesView } from './ui/exercisesView.js';
+import { showFTUE, shouldShowFTUE } from './ui/ftue.js';
 
 /**
  * Initialize the entire application
  */
 async function initializeApp() {
-  console.log('🚀 Initializing Fasting Tracker...');
+  console.log('🚀 Initializing FastCore...');
 
   // 1. Initialize storage system
   initializeStorage();
@@ -137,6 +138,13 @@ async function initializeApp() {
   showTab('dashboardTab');
 
   console.log('✅ App initialization complete');
+
+  // 11. Show FTUE if this is first launch
+  if (shouldShowFTUE()) {
+    setTimeout(() => {
+      showFTUE();
+    }, 500);
+  }
 }
 
 function registerExternalFastHandlers() {

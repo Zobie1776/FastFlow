@@ -1,5 +1,9 @@
 # Android
 android/keystore/
+keystore.properties
+*.jks
+*.keystore
+*.p12
 android/.gradle/
 android/build/
 android/app/build/
@@ -10,4 +14,3 @@ node_modules/
 # OS / IDE
 .idea/
 .DS_Store
-

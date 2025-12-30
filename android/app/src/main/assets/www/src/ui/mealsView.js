@@ -640,7 +640,7 @@ function renderMealCard(meal) {
   const dietaryTags = renderDietaryTags(meal);
 
   return `
-    <div class="meal-card" style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; position: relative;">
+    <div class="meal-card" style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; position: relative;">
       <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
         <div style="flex: 1;">
           <div style="font-size: 15px; font-weight: 700; color: var(--text-primary);">${meal.name}</div>
@@ -749,10 +749,10 @@ function attachMealEventListeners() {
 
 function openEditMealModal(meal) {
   const modalHTML = `
-    <div id="mealEditModal" class="modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px;">
-      <div class="modal-content" style="background: white; border-radius: 12px; max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+    <div id="mealEditModal" class="modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-modal-overlay); display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px;">
+      <div class="modal-content" style="background: var(--modal-bg); color: var(--modal-text-primary); border-radius: 12px; max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
         <div style="padding: 20px 24px; border-bottom: 1px solid var(--border-color);">
-          <h3 style="margin: 0; font-size: 18px; font-weight: 700;">Edit Meal</h3>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--modal-text-primary);">Edit Meal</h3>
         </div>
         <form id="mealEditForm" style="padding: 20px 24px;">
           <div class="form-group">

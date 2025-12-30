@@ -9,12 +9,27 @@
   --success-color: #10b981;
   --warning-color: #f59e0b;
   --danger-color: #ef4444;
+  --accent-color: #6366f1;
+
+  /* Text colors */
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --text-muted: #94a3b8;
+  --text-high-contrast: #0f172a;
+
+  /* Background colors */
   --bg-primary: #ffffff;
   --bg-secondary: #f8fafc;
   --bg-tertiary: #f1f5f9;
+  --bg-modal: #ffffff;
+  --bg-modal-overlay: rgba(0, 0, 0, 0.5);
+
+  /* Modal-specific text colors (inherit from page by default) */
+  --modal-text-primary: var(--text-primary);
+  --modal-text-secondary: var(--text-secondary);
+  --modal-bg: var(--bg-modal);
+
+  /* Borders and shadows */
   --border-color: #e2e8f0;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
@@ -29,9 +44,15 @@
     --text-primary: #e2e8f0;
     --text-secondary: #cbd5f5;
     --text-muted: #94a3b8;
+    --text-high-contrast: #f8fafc;
     --bg-primary: #0f172a;
     --bg-secondary: #0b1220;
     --bg-tertiary: #111827;
+    --bg-modal: #1e293b;
+    --bg-modal-overlay: rgba(0, 0, 0, 0.8);
+    --modal-text-primary: var(--text-primary);
+    --modal-text-secondary: var(--text-secondary);
+    --modal-bg: var(--bg-modal);
     --border-color: #1f2937;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
@@ -43,9 +64,15 @@ html[data-theme="light"] {
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --text-muted: #94a3b8;
+  --text-high-contrast: #0f172a;
   --bg-primary: #ffffff;
   --bg-secondary: #f8fafc;
   --bg-tertiary: #f1f5f9;
+  --bg-modal: #ffffff;
+  --bg-modal-overlay: rgba(0, 0, 0, 0.5);
+  --modal-text-primary: var(--text-primary);
+  --modal-text-secondary: var(--text-secondary);
+  --modal-bg: var(--bg-modal);
   --border-color: #e2e8f0;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
@@ -56,9 +83,15 @@ html[data-theme="dark"] {
   --text-primary: #e2e8f0;
   --text-secondary: #cbd5f5;
   --text-muted: #94a3b8;
+  --text-high-contrast: #f8fafc;
   --bg-primary: #0f172a;
   --bg-secondary: #0b1220;
   --bg-tertiary: #111827;
+  --bg-modal: #1e293b;
+  --bg-modal-overlay: rgba(0, 0, 0, 0.8);
+  --modal-text-primary: var(--text-primary);
+  --modal-text-secondary: var(--text-secondary);
+  --modal-bg: var(--bg-modal);
   --border-color: #1f2937;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
@@ -749,4 +782,85 @@ body {
 
 .hidden {
   display: none !important;
+}
+
+/* ========================================
+   ACCESSIBILITY MODES
+   ======================================== */
+
+/* High Contrast Mode */
+html[data-contrast="high"] {
+  --text-primary: var(--text-high-contrast);
+  --border-color: currentColor;
+}
+
+html[data-theme="light"][data-contrast="high"] {
+  --text-primary: #000000;
+  --text-secondary: #1e293b;
+  --text-high-contrast: #000000;
+  --bg-modal: #ffffff;
+  --border-color: #000000;
+}
+
+html[data-theme="dark"][data-contrast="high"] {
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-high-contrast: #ffffff;
+  --bg-modal: #0f172a;
+  --border-color: #ffffff;
+}
+
+/* Colorblind-Friendly Mode - Enhanced contrast ratios (WCAG AA minimum 4.5:1) */
+html[data-colorblind="true"] {
+  --primary-color: #3730a3;
+  --accent-color: #3730a3;
+}
+
+html[data-theme="light"][data-colorblind="true"] {
+  --text-primary: #000000;
+  --text-secondary: #1e293b;
+  --primary-color: #3730a3;
+  --success-color: #047857;
+  --warning-color: #b45309;
+  --danger-color: #b91c1c;
+}
+
+html[data-theme="dark"][data-colorblind="true"] {
+  --text-primary: #ffffff;
+  --text-secondary: #f1f5f9;
+  --primary-color: #818cf8;
+  --success-color: #34d399;
+  --warning-color: #fbbf24;
+  --danger-color: #f87171;
+}
+
+/* Force Dark Text on Light Modals - SCOPED TO MODALS ONLY */
+html[data-force-dark-modal-text="true"][data-theme="light"] {
+  /* Light theme: keep modal variables same as page */
+  --modal-bg: #ffffff;
+  --modal-text-primary: #1e293b;
+  --modal-text-secondary: #64748b;
+}
+
+html[data-force-dark-modal-text="true"][data-theme="dark"] {
+  /* Dark theme: force light modal background with dark text (MODAL ONLY) */
+  --modal-bg: #f8fafc;
+  --modal-text-primary: #1e293b;
+  --modal-text-secondary: #475569;
+  /* DO NOT override --text-primary or --bg-primary here - page remains dark */
+}
+
+/* Modal-specific elements use modal variables */
+.modal-content,
+.modal-overlay .modal-content {
+  background: var(--modal-bg);
+  color: var(--modal-text-primary);
+}
+
+.modal-content .example-box,
+.modal-content .example,
+.modal-content .example-preview {
+  background: var(--bg-secondary);
+  color: var(--modal-text-primary);
+  border-color: var(--border-color);
 }

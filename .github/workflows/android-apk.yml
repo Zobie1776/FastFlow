@@ -25,6 +25,10 @@ jobs:
         env:
           FASTFLOW_KEYSTORE_BASE64: ${{ secrets.FASTFLOW_KEYSTORE_BASE64 }}
 
+      - name: Make gradlew executable
+        working-directory: android
+        run: chmod +x gradlew
+
       - name: Build release APK
         working-directory: android
         run: ./gradlew assembleRelease

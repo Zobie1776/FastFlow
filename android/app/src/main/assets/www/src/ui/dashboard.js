@@ -7,6 +7,7 @@ import { getFastingStats } from '../fasting/sessions.js';
 import { getWeightChangeStats } from '../bodyStats/bodyStats.js';
 import { getMaintenanceModeStatusMessage, isMaintenanceModeActive } from '../maintenance/maintenance.js';
 import { getSchedulerSettings } from '../scheduler/scheduler.js';
+import { storage, COLLECTIONS } from '../state/storage.js';
 
 export function initializeDashboard() {
   setupFastingControls();
@@ -15,6 +16,7 @@ export function initializeDashboard() {
   renderDashboardStats();
   renderMaintenanceBanner();
   renderSchedulerHint();
+  updateFastingUI(); // Restore UI state from persistent storage
 
   window.addEventListener('schedulerUpdated', () => {
     renderSchedulerHint();
@@ -29,6 +31,16 @@ function setupFastingControls() {
   const startBtn = document.getElementById('startFastBtn');
   const stopBtn = document.getElementById('stopFastBtn');
   const protocolSelect = document.getElementById('timerPhaseSelect');
+
+  // Restore selected protocol from storage
+  restoreSelectedProtocol();
+
+  // Save protocol selection on change
+  if (protocolSelect) {
+    protocolSelect.addEventListener('change', () => {
+      saveSelectedProtocol(protocolSelect.value);
+    });
+  }
 
   if (startBtn) {
     startBtn.addEventListener('click', async () => {
@@ -309,5 +321,21 @@ function setupTimerOverlayInteraction() {
         phaseEl.classList.remove('visible');
       });
     }
+  }
+}
+
+function saveSelectedProtocol(protocolId) {
+  storage.setValue(COLLECTIONS.SELECTED_PROTOCOL, protocolId);
+  console.log('Protocol saved:', protocolId);
+}
+
+function restoreSelectedProtocol() {
+  const protocolSelect = document.getElementById('timerPhaseSelect');
+  if (!protocolSelect) return;
+
+  const savedProtocol = storage.getValue(COLLECTIONS.SELECTED_PROTOCOL);
+  if (savedProtocol) {
+    protocolSelect.value = savedProtocol;
+    console.log('Protocol restored:', savedProtocol);
   }
 }

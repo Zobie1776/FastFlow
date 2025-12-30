@@ -105,8 +105,8 @@ export function showImportPreview(options) {
   return new Promise((resolve, reject) => {
     // Create modal HTML
     const modalHTML = `
-      <div id="importPreviewModal" class="modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px;">
-        <div class="modal-content" style="background: white; border-radius: 12px; max-width: 600px; width: 100%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+      <div id="importPreviewModal" class="modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-modal-overlay); display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px;">
+        <div class="modal-content" style="background: var(--modal-bg); color: var(--modal-text-primary); border-radius: 12px; max-width: 600px; width: 100%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
 
           <!-- Modal Header -->
           <div style="padding: 24px; border-bottom: 2px solid #e5e7eb;">
@@ -186,7 +186,7 @@ export function showImportPreview(options) {
 
           <!-- Modal Footer -->
           <div style="padding: 20px 24px; border-top: 2px solid #e5e7eb; display: flex; gap: 12px; justify-content: flex-end; background: #f9fafb;">
-            <button id="cancelImportBtn" style="padding: 10px 24px; border: 2px solid #d1d5db; background: white; border-radius: 8px; font-weight: 600; color: #374151; cursor: pointer; font-size: 14px;">
+            <button id="cancelImportBtn" style="padding: 10px 24px; border: 2px solid var(--border-color); background: var(--bg-primary); border-radius: 8px; font-weight: 600; color: var(--text-primary); cursor: pointer; font-size: 14px;">
               Cancel
             </button>
             <button id="confirmImportBtn" ${items.length === 0 ? 'disabled' : ''} style="padding: 10px 24px; border: none; background: ${items.length === 0 ? '#d1d5db' : '#6366f1'}; color: white; border-radius: 8px; font-weight: 600; cursor: ${items.length === 0 ? 'not-allowed' : 'pointer'}; font-size: 14px;">

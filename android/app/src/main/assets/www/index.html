@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="description" content="Track your intermittent fasting journey with protocols, badges, and body stats">
   <meta name="theme-color" content="#6366f1">
-  <title>FastFlow</title>
+  <title>FastCore</title>
 
   <!-- Styles -->
   <link rel="stylesheet" href="src/styles/main.css">
@@ -18,10 +18,10 @@
     <!-- Header -->
     <header class="app-header">
       <div class="app-logo-row">
-        <img src="public/assets/logo/fastflow-logo.svg" alt="FastFlow" class="app-logo">
-        <h1>FastFlow</h1>
+        <img src="public/assets/logo/fastflow-logo.svg" alt="FastCore" class="app-logo">
+        <h1>FastCore</h1>
       </div>
-      <div class="subtitle">Your journey to metabolic health</div>
+      <div class="subtitle">Intermittent Fasting Tracker</div>
     </header>
 
     <!-- Maintenance Mode Banner (conditionally shown) -->
@@ -482,7 +482,10 @@
       </div>
 
       <div class="card">
-        <h2>Body Stats History</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2 style="margin: 0;">Body Stats History</h2>
+          <button id="viewProgressHistoryBtn" class="btn btn-outline">View Progress Photos</button>
+        </div>
         <div id="bodyStatsTable"></div>
       </div>
     </div>
@@ -549,6 +552,37 @@
       </div>
 
       <div class="card">
+        <h2>Accessibility</h2>
+        <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+          Enhance text visibility and contrast for better readability
+        </div>
+
+        <div class="form-checkbox">
+          <input type="checkbox" id="accessibilityHighContrast">
+          <label for="accessibilityHighContrast">High Contrast Mode</label>
+        </div>
+        <div style="font-size: 12px; color: var(--text-secondary); margin: -8px 0 12px 26px;">
+          Increases text contrast for improved readability
+        </div>
+
+        <div class="form-checkbox">
+          <input type="checkbox" id="accessibilityColorblind">
+          <label for="accessibilityColorblind">Colorblind-Friendly Text</label>
+        </div>
+        <div style="font-size: 12px; color: var(--text-secondary); margin: -8px 0 12px 26px;">
+          Uses WCAG AA compliant colors with enhanced contrast ratios
+        </div>
+
+        <div class="form-checkbox">
+          <input type="checkbox" id="accessibilityForceDarkText">
+          <label for="accessibilityForceDarkText">Force Dark Text on Light Modals</label>
+        </div>
+        <div style="font-size: 12px; color: var(--text-secondary); margin: -8px 0 0 26px;">
+          Ensures dark text appears on light modal backgrounds in dark mode
+        </div>
+      </div>
+
+      <div class="card">
         <h2>Maintenance Mode</h2>
         <div id="maintenanceModeStatus"></div>
         <button id="toggleMaintenanceModeBtn" class="btn btn-primary btn-block">
@@ -590,6 +624,14 @@
           <p style="font-size: 13px; color: #dc2626; margin-bottom: 12px; font-weight: 600;">⚠️ Danger Zone</p>
           <button id="clearCacheBtn" class="btn btn-danger btn-block">Clear All Data & Reset App</button>
         </div>
+      </div>
+
+      <div class="card">
+        <h2>Help & Support</h2>
+        <button id="showWalkthroughBtn" class="btn btn-outline btn-block">View Walkthrough Again</button>
+        <p style="font-size: 13px; color: var(--text-secondary); margin-top: 12px;">
+          Revisit the first-time user guide to learn about FastCore's features.
+        </p>
       </div>
 
 
@@ -647,6 +689,75 @@
             This mode recommends gentler protocols (8:16, 10:14, 12:12, 14:10) and reduces notification
             frequency while still tracking your progress. Perfect for sustainable, long-term health.
           </p>
+        </div>
+
+        <div class="education-card">
+          <h4>Near-Failure Training, Calisthenics, and Intermittent Fasting</h4>
+
+          <div style="margin-bottom: 16px;">
+            <strong style="color: var(--text-primary); display: block; margin-bottom: 6px;">
+              What is Near-Failure Training?
+              <button id="nearFailureInfoBtn" style="background: var(--primary-color); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; margin-left: 8px; vertical-align: middle;" title="Learn more">?</button>
+            </strong>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6;">
+              Near-failure training refers to performing resistance exercises close to technical failure, commonly described as stopping with roughly 0–3 reps remaining. Research commonly links this approach to increased muscle activation and mechanical tension. Hypertrophy discussions often reference a moderate rep range of approximately 6–20 reps. Full failure is not required; stopping slightly short is often discussed as sufficient.
+            </p>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <strong style="color: var(--text-primary); display: block; margin-bottom: 6px;">Gym Weights and Calisthenics Use the Same Principle</strong>
+            <p style="margin: 0 0 8px 0; font-size: 14px; line-height: 1.6;">
+              The same near-failure strategy applies to both gym-based and bodyweight training. The underlying driver is progressive overload combined with challenging sets taken close to technical failure.
+            </p>
+
+            <div style="margin-left: 16px; margin-bottom: 8px;">
+              <strong style="font-size: 13px; color: var(--text-primary);">In the Gym:</strong>
+              <p style="margin: 4px 0 0 0; font-size: 13px; line-height: 1.5; color: var(--text-secondary);">
+                Load is increased gradually using free weights or machines. Sets are commonly adjusted to remain challenging within a moderate rep range. Progression occurs when a given weight becomes easier over time.
+              </p>
+            </div>
+
+            <div style="margin-left: 16px;">
+              <strong style="font-size: 13px; color: var(--text-primary);">With Calisthenics:</strong>
+              <p style="margin: 4px 0 0 0; font-size: 13px; line-height: 1.5; color: var(--text-secondary);">
+                Progressive overload is achieved by modifying leverage, range of motion, tempo, or adding external load. Bodyweight exercises can be scaled to reach near failure in similar rep ranges as weighted exercises. The effort level, not the equipment, is the primary variable.
+              </p>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <strong style="color: var(--text-primary); display: block; margin-bottom: 6px;">Combining Gym and Calisthenics</strong>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6;">
+              Many programs mix weighted and bodyweight exercises. Compound lifts and advanced calisthenics movements can both provide a strong muscular stimulus. These approaches are interchangeable across training days. This mixed approach is often discussed alongside intermittent fasting when the goal is fat loss with muscle retention.
+            </p>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <strong style="color: var(--text-primary); display: block; margin-bottom: 6px;">Intermittent Fasting Context</strong>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6;">
+              Research suggests that intermittent fasting can support fat loss while preserving lean mass. Resistance training provides a muscle-retention signal during periods of calorie restriction. Combining near-failure training with IF may help influence body composition outcomes. Individual responses vary. These are associations observed in research, not guaranteed outcomes.
+            </p>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <strong style="color: var(--text-primary); display: block; margin-bottom: 6px;">Common Patterns Discussed in Research and Practice</strong>
+            <p style="margin: 0 0 8px 0; font-size: 13px; line-height: 1.5; color: var(--text-secondary); font-style: italic;">
+              This section is informational only and does not constitute recommendations.
+            </p>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6;">
+              • Short, intense resistance sessions<br>
+              • Multiple hard sets per muscle group<br>
+              • Training performed a few times per week<br>
+              • Alternating gym and calisthenics sessions<br>
+              • Moderate rep ranges taken close to technical failure<br>
+              • Progressive adjustments to maintain training stimulus
+            </p>
+          </div>
+
+          <div style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 12px; border-radius: 8px; font-size: 13px;">
+            <strong>Informational Disclaimer:</strong><br>
+            This content is educational only. It does not constitute medical advice, diagnosis, treatment, or performance guarantees. Individual responses to training and fasting vary. Consult a healthcare provider before beginning any new exercise or nutrition program.
+          </div>
         </div>
 
         <div class="education-card">

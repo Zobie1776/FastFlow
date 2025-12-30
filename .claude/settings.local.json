@@ -3,7 +3,15 @@
     "allow": [
       "Bash(ls:*)",
       "Bash(tree:*)",
-      "Bash(npm install)"
+      "Bash(npm install)",
+      "Bash(test:*)",
+      "Bash(cat:*)",
+      "Bash(keytool -list -v -keystore /home/archuser/repo/fasting_tracker/android/android/keystore/fastflow-release.keystore -storepass FastCoreRelease2025:*)",
+      "Bash(keytool:*)",
+      "Bash(rm:*)",
+      "Bash(./gradlew clean assembleRelease:*)",
+      "Bash(apksigner verify:*)",
+      "Bash(./gradlew assembleRelease:*)"
     ]
   }
 }

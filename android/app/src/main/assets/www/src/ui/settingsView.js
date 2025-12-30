@@ -6,8 +6,10 @@ import { isMaintenanceModeActive, toggleMaintenanceMode, getMaintenanceState } f
 import { getNotificationPreferences, saveNotificationPreferences } from '../notifications/notifications.js';
 import { exportAllData, importAllData } from '../state/storage.js';
 import { getSchedulerSettings, saveSchedulerSettings, scheduleSchedulerNotifications } from '../scheduler/scheduler.js';
+import { showFTUEFromSettings } from './ftue.js';
 
 const THEME_STORAGE_KEY = 'fastflow_theme';
+const ACCESSIBILITY_STORAGE_KEY = 'fastflow_accessibility';
 let themeMediaQuery = null;
 let themeMediaHandler = null;
 
@@ -17,13 +19,25 @@ export function initializeSettingsView() {
   setupSchedulerSettings();
   setupDataManagement();
   setupThemeSettings();
+  setupAccessibilitySettings();
   setupNotificationStatusBanner();
+  setupWalkthroughButton();
   renderMaintenanceStatus();
+}
+
+function setupWalkthroughButton() {
+  const btn = document.getElementById('showWalkthroughBtn');
+  if (!btn) return;
+
+  btn.addEventListener('click', () => {
+    showFTUEFromSettings();
+  });
 }
 
 export function applyStoredTheme() {
   const storedTheme = getStoredTheme();
   applyTheme(storedTheme);
+  applyAccessibilitySettings();
 }
 
 function setupMaintenanceModeToggle() {
@@ -339,5 +353,96 @@ function showNotification(message, type) {
   console.log(`[${type}] ${message}`);
   if (window.showNotification) {
     window.showNotification(message, type);
+  }
+}
+
+// ========================================
+// ACCESSIBILITY SETTINGS
+// ========================================
+
+function setupAccessibilitySettings() {
+  const highContrastCheckbox = document.getElementById('accessibilityHighContrast');
+  const colorblindCheckbox = document.getElementById('accessibilityColorblind');
+  const forceDarkTextCheckbox = document.getElementById('accessibilityForceDarkText');
+
+  if (!highContrastCheckbox || !colorblindCheckbox || !forceDarkTextCheckbox) return;
+
+  // Load current accessibility settings
+  const settings = getAccessibilitySettings();
+  highContrastCheckbox.checked = settings.highContrast;
+  colorblindCheckbox.checked = settings.colorblindFriendly;
+  forceDarkTextCheckbox.checked = settings.forceDarkModalText;
+
+  // Event listeners
+  highContrastCheckbox.addEventListener('change', () => {
+    const settings = getAccessibilitySettings();
+    settings.highContrast = highContrastCheckbox.checked;
+    saveAccessibilitySettings(settings);
+    applyAccessibilitySettings();
+    showNotification('High contrast mode ' + (settings.highContrast ? 'enabled' : 'disabled'), 'success');
+  });
+
+  colorblindCheckbox.addEventListener('change', () => {
+    const settings = getAccessibilitySettings();
+    settings.colorblindFriendly = colorblindCheckbox.checked;
+    saveAccessibilitySettings(settings);
+    applyAccessibilitySettings();
+    showNotification('Colorblind-friendly mode ' + (settings.colorblindFriendly ? 'enabled' : 'disabled'), 'success');
+  });
+
+  forceDarkTextCheckbox.addEventListener('change', () => {
+    const settings = getAccessibilitySettings();
+    settings.forceDarkModalText = forceDarkTextCheckbox.checked;
+    saveAccessibilitySettings(settings);
+    applyAccessibilitySettings();
+    showNotification('Force dark text mode ' + (settings.forceDarkModalText ? 'enabled' : 'disabled'), 'success');
+  });
+}
+
+function getAccessibilitySettings() {
+  const defaultSettings = {
+    highContrast: false,
+    colorblindFriendly: false,
+    forceDarkModalText: false
+  };
+
+  const stored = localStorage.getItem(ACCESSIBILITY_STORAGE_KEY);
+  if (!stored) return defaultSettings;
+
+  try {
+    return { ...defaultSettings, ...JSON.parse(stored) };
+  } catch (error) {
+    console.error('Failed to parse accessibility settings:', error);
+    return defaultSettings;
+  }
+}
+
+function saveAccessibilitySettings(settings) {
+  localStorage.setItem(ACCESSIBILITY_STORAGE_KEY, JSON.stringify(settings));
+}
+
+function applyAccessibilitySettings() {
+  const settings = getAccessibilitySettings();
+  const root = document.documentElement;
+
+  // Apply high contrast mode
+  if (settings.highContrast) {
+    root.dataset.contrast = 'high';
+  } else {
+    delete root.dataset.contrast;
+  }
+
+  // Apply colorblind-friendly mode
+  if (settings.colorblindFriendly) {
+    root.dataset.colorblind = 'true';
+  } else {
+    delete root.dataset.colorblind;
+  }
+
+  // Apply force dark text on modals mode
+  if (settings.forceDarkModalText) {
+    root.dataset.forceDarkModalText = 'true';
+  } else {
+    delete root.dataset.forceDarkModalText;
   }
 }
